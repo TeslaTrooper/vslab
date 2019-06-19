@@ -7,7 +7,7 @@ import de.hska.iwi.vslab.contentmanagementservice.Category;
 
 public class CategoryClient {
 
-	private String categoryUri = "http://localhost:8088/categories";
+	private String categoryUri = "http://category-service/categories/";
 
 
 

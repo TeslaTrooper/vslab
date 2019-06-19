@@ -1,11 +1,9 @@
 FROM java:8-jdk-alpine
 
-VOLUME /tmp
+COPY ./target/user-service-0.0.1-SNAPSHOT.jar /usr/app/
 
-EXPOSE 8085
+WORKDIR /usr/app
 
-ARG JAR_FILE=target/user-service-0.0.1-SNAPSHOT.jar
+RUN sh -c 'touch user-service-0.0.1-SNAPSHOT.jar'
 
-ADD ${JAR_FILE} user-service.jar
-
-ENTRYPOINT ["java","-jar","/user-service.jar"]  
+ENTRYPOINT ["java","-jar","user-service-0.0.1-SNAPSHOT.jar"]  

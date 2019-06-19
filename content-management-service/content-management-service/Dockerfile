@@ -1,12 +1,9 @@
-
 FROM java:8-jdk-alpine
 
-VOLUME /tmp
+COPY ./target/content-management-service-0.0.1-SNAPSHOT.jar /usr/app/
 
-EXPOSE 8089
+WORKDIR /usr/app
 
-ARG JAR_FILE=target/content-management-service-0.0.1-SNAPSHOT.jar
+RUN sh -c 'touch content-management-service-0.0.1-SNAPSHOT.jar'
 
-ADD ${JAR_FILE} content-management.jar
-
-ENTRYPOINT ["java","-jar","/content-management.jar"]  
+ENTRYPOINT ["java","-jar","content-management-service-0.0.1-SNAPSHOT.jar"]  

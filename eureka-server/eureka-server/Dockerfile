@@ -1,11 +1,9 @@
 FROM java:8-jdk-alpine
 
-VOLUME /tmp
+COPY ./target/eureka-server-0.0.1-SNAPSHOT.jar /usr/app/
 
-EXPOSE 8761
+WORKDIR /usr/app
 
-ARG JAR_FILE=target/eureka-server-0.0.1-SNAPSHOT.jar
+RUN sh -c 'touch eureka-server-0.0.1-SNAPSHOT.jar'
 
-ADD ${JAR_FILE} eureka-service.jar
-
-ENTRYPOINT ["java","-jar","/eureka-service.jar"]  
+ENTRYPOINT ["java","-jar","eureka-server-0.0.1-SNAPSHOT.jar"]  

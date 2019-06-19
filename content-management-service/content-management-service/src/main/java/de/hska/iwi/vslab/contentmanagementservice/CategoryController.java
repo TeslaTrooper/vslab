@@ -51,7 +51,7 @@ public class CategoryController {
 		// TODO return category
 		
 		Category[] tempCats = categoryClient.getCategories();
-		System.out.println("Get Category in Cms+++++++++++++++++++++++++++++++++++++++++++: "+tempCats.length);
+		System.out.println("Get Category in Cms: "+tempCats.length);
 		/*
 		 * if(tempCats != null) for(Category c : tempCats)
 		 * catCache.putIfAbsent(c.getId(), c);
@@ -68,15 +68,14 @@ public class CategoryController {
 		// Logout user
 
 		Category c = categoryClient.getCategoryById(id);
-		System.out.println("Get Category per ic in Cms+++++++++++++++++++++++++++++++++++++++++++: "+c);
-//		if (c != null) {
-//			catCache.putIfAbsent(id, c);
-//			return Response.ok(c).build();
-//		} else {
-//			return Response.noContent().build();
-//		}
+		if (c != null) {
+			catCache.putIfAbsent(id, c);
+			return Response.ok(c).build();
+		} else {
+			return Response.noContent().build();
+		}
 
-		 return Response.ok().build();
+		// return Response.ok().build();
 	}
 
 	@DeleteMapping("{id}")

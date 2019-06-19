@@ -26,5 +26,5 @@ zuul:
     content-mgmt:
       path: /**
       service-id: content-mgmt
-      strip-prefix: false
+      strip-prefix: true
 
