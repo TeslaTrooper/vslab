@@ -16,7 +16,7 @@ services:
     volumes:
       - ./data/:/var/lib/mysql
 
-  eureka:
+  eureka-srv:
     image: eureka
     build:
       context: ./eureka-server/eureka-server
@@ -26,8 +26,8 @@ services:
     expose:
       - "8761"
     
-  category-service:
-    image: category-service
+  category-srv:
+    image: categories
     ports:
       - "8088:8088"
     expose:
@@ -37,7 +37,7 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - db-service
-      - eureka
+      - eureka-srv
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-service:3306/eshop?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=dbuser
@@ -45,24 +45,24 @@ services:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://eureka:8761/eureka
     
-  content-mgmt:
-    image: content-mgmt
+  content-mgmt-srv:
+    image: contents
     ports:
       - "8089:8089"
     expose:
       - "8089"
     depends_on:
-      - eureka
+      - eureka-srv
     build:
       context: ./content-management-service/content-management-service
       dockerfile: ./Dockerfile
     expose:
       - "8089"
  
-  products:
+  product-srv:
     image: products
     ports:
-      - "8084:8088"
+      - "8084:8084"
     expose: 
       - "8084"
     build:
@@ -70,16 +70,16 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - db-service
-      - eureka
+      - eureka-srv
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-service:3306/eshop?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=dbpass
     
-  users:
+  user-srv:
     image: users
     ports:
-      - "8085:8088"
+      - "8085:8085"
     expose:
       - "8085"
     build:
@@ -87,20 +87,20 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - db-service
-      - eureka
+      - eureka-srv
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-service:3306/eshop?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=dbpass
       
-  zuul:
+  zuul-srv:
     image: zuul
     build:
       context: ./zuul-server/zuul-server
       dockerfile: ./Dockerfile
     ports:
-      - "8086:8088"
+      - "8086:8086"
     expose:
       - "8086"
     depends_on:
-      - eureka
+      - eureka-srv
