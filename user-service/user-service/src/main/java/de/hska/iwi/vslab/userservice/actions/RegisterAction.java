@@ -24,7 +24,7 @@ public class RegisterAction {
 		roleRepo.save(new Role("user", 1));
 	}
 
-	public void register(final JSONRegistration jSONRegistration) throws Exception {
+	public User register(final JSONRegistration jSONRegistration) throws Exception {
 		Role role = roleRepo.getRoleByLevel(1); // 1 -> regular User, 2 -> Admin
 
 		if (userRepo.existsByUsername(jSONRegistration.getUsername()))
@@ -36,6 +36,8 @@ public class RegisterAction {
 		User user = new User(jSONRegistration.getUsername(), jSONRegistration.getFirstname(),
 				jSONRegistration.getLastname(), jSONRegistration.getPassword1(), role);
 		userRepo.save(user);
+		
+		return user;
 	}
 
 	private boolean isValid(final JSONRegistration jSONRegistration) {

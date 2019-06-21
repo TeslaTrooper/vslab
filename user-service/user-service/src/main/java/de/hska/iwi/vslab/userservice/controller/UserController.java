@@ -1,9 +1,8 @@
 package de.hska.iwi.vslab.userservice.controller;
 
-import javax.ws.rs.core.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,58 +13,53 @@ import de.hska.iwi.vslab.userservice.actions.LogoutAction;
 import de.hska.iwi.vslab.userservice.actions.RegisterAction;
 import de.hska.iwi.vslab.userservice.controller.json.JSONRegistration;
 import de.hska.iwi.vslab.userservice.controller.json.JSONUser;
+import de.hska.iwi.vslab.userservice.db.dataobjects.User;
 
 @RestController
-@RequestMapping(value="users/")
+@RequestMapping(value = "/users/")
 public class UserController {
-	
+
 	private final RegisterAction registerAction;
 	private final LoginAction loginAction;
 	private final LogoutAction logoutAction;
-	
+
 	@Autowired
-	public UserController(final RegisterAction registerAction, final LoginAction loginAction, final LogoutAction logoutAction) {
+	public UserController(final RegisterAction registerAction, final LoginAction loginAction,
+			final LogoutAction logoutAction) {
 		this.registerAction = registerAction;
 		this.loginAction = loginAction;
 		this.logoutAction = logoutAction;
 	}
 
 	@PostMapping
-	public Response create(@RequestBody final JSONRegistration jSONRegistration) {
+	public ResponseEntity<User> create(@RequestBody final JSONRegistration jSONRegistration) {
 		try {
-			registerAction.register(jSONRegistration);
+			return new ResponseEntity<>(registerAction.register(jSONRegistration), HttpStatus.OK);
 		} catch (Exception e) {
-			return Response.serverError().build();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		
-		return Response.ok().build();
 	}
-	
+
 	@PostMapping("login")
-	public Response login(@RequestBody final JSONUser jSONUser) {
+	public ResponseEntity<User> login(@RequestBody final JSONUser jSONUser) {
 		try {
 			loginAction.login(jSONUser);
 		} catch (Exception e) {
-			return Response.serverError().build();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		
-		return Response.ok().build();
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("logout")
-	public Response logout(@RequestBody final JSONUser jSONUser) {
+	public ResponseEntity<User> logout(@RequestBody final JSONUser jSONUser) {
 		try {
 			logoutAction.logout();
 		} catch (Exception e) {
-			return Response.serverError().build();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		
-		return Response.ok().build();
-	}
-	
-	@GetMapping("test")
-	public Response getTest() {
-		return Response.ok("TEST").build();
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
 }

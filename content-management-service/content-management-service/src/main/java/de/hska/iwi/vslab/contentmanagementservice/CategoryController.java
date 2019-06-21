@@ -1,11 +1,10 @@
 package de.hska.iwi.vslab.contentmanagementservice;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-
 import de.hska.iwi.vslab.contentmanagementservice.clients.CategoryClient;
 import de.hska.iwi.vslab.contentmanagementservice.clients.ProductClient;
 
 @RestController
-@RequestMapping(value = "/categories")
+@RequestMapping(value = "/categories/")
 public class CategoryController {
 
 	private final Map<Integer, Category> catCache = new LinkedHashMap<Integer, Category>();
@@ -29,79 +25,56 @@ public class CategoryController {
 	private ProductClient productClient = new ProductClient();
 
 	@PostMapping
-	public Response createCategory(@RequestBody Category c) {
+	public ResponseEntity<Category> createCategory(@RequestBody String name) {
 		// TODO add new category
-		boolean created = categoryClient.createCategory(c);
-		if (created) {
-			return Response.ok().build();
-		} else {
-			return Response.serverError().build();
-		}
-
+		return categoryClient.createCategory(name);
 	}
 
 	@GetMapping
-	// @HystrixCommand(fallbackMethod = "getAllCategoriesCache", commandProperties =
-	// {
-	// @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2")
-	// })
-	public Response getCategory() {
-
+	public ResponseEntity<Category[]> getCategory() {
+		ResponseEntity<Category[]> cs = categoryClient.getCategories();
+		
 		// Login user
 		// TODO return category
-		
-		Category[] tempCats = categoryClient.getCategories();
-		System.out.println("Get Category in Cms: "+tempCats.length);
-		/*
-		 * if(tempCats != null) for(Category c : tempCats)
-		 * catCache.putIfAbsent(c.getId(), c);
-		 */
+		if (cs != null)
+			for (Category c : cs.getBody())
+				catCache.putIfAbsent(c.getId(), c);
 
-		return Response.ok(categoryClient.getCategories()).build();
+		return cs;
 	}
 
 	@GetMapping("{id}")
-	// @HystrixCommand(fallbackMethod = "getCategoryCache", commandProperties = {
-	// @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2")
-	// })
-	public Response getCategoryById(@PathVariable int id) {
+	public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
 		// Logout user
 
-		Category c = categoryClient.getCategoryById(id);
+		Category c = categoryClient.getCategoryById(id).getBody();
+
 		if (c != null) {
 			catCache.putIfAbsent(id, c);
-			return Response.ok(c).build();
-		} else {
-			return Response.noContent().build();
+			return new ResponseEntity<>(c, HttpStatus.OK);
 		}
 
-		// return Response.ok().build();
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
 	}
 
 	@DeleteMapping("{id}")
-	public Response deleteCategoryById(@PathVariable int id) {
+	public ResponseEntity<Boolean> deleteCategoryById(@PathVariable int id) {
 		boolean deleted = categoryClient.deleteCategory(id);
+
 		if (deleted) {
-			return Response.ok().build();
-		} else {
-			return Response.serverError().build();
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
+
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
 	}
 
 	@GetMapping("{id}/products")
-	public Response getProducts(@PathVariable int id) {
+	public ResponseEntity<Product[]> getProducts(@PathVariable int id) {
 		// Logout user
-		Product[] p = productClient.getProductsByCategoryId(id);
-		return Response.ok(p).build();
-
+		return productClient.getProductsByCategoryId(id);
 	}
 
-	public Response getCategoriesCache(int catId) {
-		return Response.ok(catCache.get(catId)).build();
-	}
-
-	public Response getAllCategoriesCache() {
-		return Response.ok(catCache.values()).build();
-	}
+	
 }

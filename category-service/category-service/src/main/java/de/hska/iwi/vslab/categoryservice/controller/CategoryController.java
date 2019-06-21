@@ -1,5 +1,7 @@
 package de.hska.iwi.vslab.categoryservice.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -11,54 +13,58 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.hska.iwi.vslab.categoryservice.dao.Category;
 import de.hska.iwi.vslab.categoryservice.dao.CategoryRepo;
 
-
 @RestController
-@RequestMapping(value = "/categories")
+
 public class CategoryController {
 
 	@Autowired
 	private CategoryRepo repo;
-	
-	@PostMapping
-	public ResponseEntity<?> create(@RequestBody String name) throws Exception {
+
+	@PostMapping(value = "/categories")
+	public ResponseEntity<Category> create(@RequestBody String name) throws Exception {
 		// Create Category
 		if (name.length() == 0) {
 			throw new IllegalArgumentException("Category must be given a name!");
 		}
-		repo.save(new Category(name));
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+
+		Category c = repo.save(new Category(name));
+		return new ResponseEntity<>(c, HttpStatus.CREATED);
 	}
 
-	@GetMapping
+	@GetMapping(value = "/categories")
 	public ResponseEntity<Category[]> getCategories() {
-		
 		Iterable<Category> allCategories = repo.findAll();
-		
-		Category[] testCats = new Category[1];
-		testCats[0] = new Category("TESTCATEGORY");
-		System.out.println("Get Categories called++++++++++++++++++++++++");
-		return new ResponseEntity<Category[]>(testCats, HttpStatus.OK);
-	
+
+		return new ResponseEntity<Category[]>(toArray(allCategories), HttpStatus.OK);
+
 	}
 
-	@GetMapping("{id}")
+	@GetMapping(value = "/categories/{id}")
 	public ResponseEntity<Category> getCategory(@PathVariable final long id) {
-		System.out.println("Get Categoriy by id called++++++++++++++++++++++++");
 		Category category = repo.findById(id).orElseThrow(() -> new EntityNotFoundException());
 		return new ResponseEntity<>(category, HttpStatus.OK);
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping(value = "/categories/{id}")
 	public ResponseEntity<?> deleteCategory(@PathVariable final long id) {
-		
 		repo.deleteById(id);
+
 		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
+	private Category[] toArray(Iterable<Category> cats) {
+		List<Category> list = new ArrayList<>();
+
+		for (Category c : cats) {
+			list.add(c);
+		}
+
+		return list.toArray(new Category[list.size()]);
 	}
 
 }

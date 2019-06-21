@@ -1,6 +1,0 @@
-version: '3.7'
-services:
-  cms:
-    image: cms
-    ports:
-      - 8087:8088

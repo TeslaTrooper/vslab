@@ -1,6 +1,6 @@
 server:
-  port: 8088
-
+  port: 8770
+  
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
@@ -19,12 +19,11 @@ zuul:
   - '*'
   prefix: /webshop
   routes:
-    user-service:
+    users:
       path: /users/**
-      service-id: user-service
+      service-id: users
       strip-prefix: false
-    content-mgmt:
+    content-management:
       path: /**
-      service-id: content-mgmt
+      service-id: content-management
       strip-prefix: true
-
