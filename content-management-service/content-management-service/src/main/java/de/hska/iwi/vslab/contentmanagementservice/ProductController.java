@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.hska.iwi.vslab.contentmanagementservice.clients.ProductClient;
+import de.hska.iwi.vslab.contentmanagementservice.dto.JSONProduct;
 
 @RestController
 @RequestMapping(value = "/products/")
@@ -22,7 +23,7 @@ public class ProductController {
 	private ProductClient productClient = new ProductClient();
 
 	@PostMapping
-	public ResponseEntity<Product> createProduct(@RequestBody Product p) {
+	public ResponseEntity<Product> createProduct(@RequestBody JSONProduct p) {
 		return productClient.createProduct(p);
 	}
 

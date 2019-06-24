@@ -34,8 +34,10 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<User> create(@RequestBody final JSONRegistration jSONRegistration) {
 		try {
+			System.out.println(String.format("register: %s, %s, %s, %s, %s", jSONRegistration.getUsername(), jSONRegistration.getFirstname(), jSONRegistration.getLastname(),jSONRegistration.getPassword1(),jSONRegistration.getPassword2()));
 			return new ResponseEntity<>(registerAction.register(jSONRegistration), HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -43,6 +45,7 @@ public class UserController {
 	@PostMapping("login")
 	public ResponseEntity<User> login(@RequestBody final JSONUser jSONUser) {
 		try {
+			System.out.println("login: " + jSONUser.getUsername() + ", " + jSONUser.getPassword());
 			loginAction.login(jSONUser);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

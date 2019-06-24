@@ -24,7 +24,7 @@ public class CategoryController {
 	private CategoryClient categoryClient = new CategoryClient();
 	private ProductClient productClient = new ProductClient();
 
-	@PostMapping
+	@PostMapping(consumes = "text/plain")
 	public ResponseEntity<Category> createCategory(@RequestBody String name) {
 		// TODO add new category
 		return categoryClient.createCategory(name);

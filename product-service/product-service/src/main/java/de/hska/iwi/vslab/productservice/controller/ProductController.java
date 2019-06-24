@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.hska.iwi.vslab.productservice.dao.ProductRepo;
+import de.hska.iwi.vslab.productservice.dataobject.JSONProduct;
 import de.hska.iwi.vslab.productservice.dataobject.Product;
 
 @RestController
@@ -24,7 +25,7 @@ public class ProductController {
 	private ProductRepo repo;
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody Product product) throws Exception {
+	public ResponseEntity<?> create(@RequestBody JSONProduct product) throws Exception {
 		// Create Product
 		// Validate name:
 
@@ -41,9 +42,9 @@ public class ProductController {
 		} else {
 			throw new IllegalArgumentException("Product must have price!");
 		}
-
-		repo.save(product);
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		
+		Product p = new Product(product.getName(), product.getPrice(), product.getCategoryId(), product.getDetails());
+		return new ResponseEntity<>(repo.save(p), HttpStatus.CREATED);
 	}
 
 	@GetMapping
@@ -54,13 +55,13 @@ public class ProductController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Product> getProduct(@PathVariable final long id) {
+	public ResponseEntity<Product> getProduct(@PathVariable final int id) {
 		Product product = repo.findById(id).orElseThrow(() -> new EntityNotFoundException());
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable final long id) {
+	public ResponseEntity<?> deleteProduct(@PathVariable final int id) {
 		repo.deleteById(id);
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}

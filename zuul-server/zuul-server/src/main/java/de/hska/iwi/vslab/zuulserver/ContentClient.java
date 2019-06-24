@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import de.hska.iwi.vslab.zuulserver.dto.JSONProduct;
+
 @Component
 public class ContentClient {
 	private String categoryUri = "http://content-management-service:8768/categories/";
@@ -37,7 +39,7 @@ public class ContentClient {
 		return true;
 	}
 
-	public ResponseEntity<Product> createProduct(Product p) {
+	public ResponseEntity<Product> createProduct(JSONProduct p) {
 		RestTemplate rt = new RestTemplate();
 		
 		return rt.postForEntity(productUri, p, Product.class);

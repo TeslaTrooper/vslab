@@ -20,6 +20,7 @@ public class RegisterAction {
 		this.userRepo = userRepo;
 		this.roleRepo = roleRepo;
 		
+		roleRepo.deleteAll();
 		roleRepo.save(new Role("admin", 0));
 		roleRepo.save(new Role("user", 1));
 	}

@@ -25,7 +25,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryRepo repo;
 
-	@PostMapping(value = "/categories")
+	@PostMapping(value = "/categories",consumes = "text/plain")
 	public ResponseEntity<Category> create(@RequestBody String name) throws Exception {
 		// Create Category
 		if (name.length() == 0) {

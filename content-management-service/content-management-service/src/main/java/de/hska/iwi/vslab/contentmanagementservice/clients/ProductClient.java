@@ -12,13 +12,14 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import de.hska.iwi.vslab.contentmanagementservice.Product;
+import de.hska.iwi.vslab.contentmanagementservice.dto.JSONProduct;
 
 public class ProductClient {
 
 	private String productUri = "http://product-service:8764/products/";
 	private final Map<Integer, Product> productCache = new LinkedHashMap<Integer, Product>();
 
-	public ResponseEntity<Product> createProduct(Product p) {
+	public ResponseEntity<Product> createProduct(JSONProduct p) {
 		RestTemplate rt = new RestTemplate();
 		
 		return rt.postForEntity(productUri, p, Product.class);
