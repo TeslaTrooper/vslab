@@ -12,7 +12,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 @EnableDiscoveryClient
 @EnableCircuitBreaker
 @EnableHystrixDashboard
-@RibbonClient("content-mgmt")
+@RibbonClient("content-management")
 public class ContentManagementServiceApplication {
 
 	public static void main(String[] args) {

@@ -7,7 +7,6 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@RibbonClient("categories")
 public class CategoryServiceApplication {
 
 	public static void main(String[] args) {
