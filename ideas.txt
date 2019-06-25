@@ -1,0 +1,8 @@
+OauthServer von Übung 5 -> Webshop absichern mit client-with-secret
+oauthServer zu docker hinzufügen (denke nicht zu eureka)
+- oauth in zuul direkt?
+- User login gegen authserver --> token zurück
+  mit token im header zu resource edge server
+  (edge server muss token validieren?)
+
+
