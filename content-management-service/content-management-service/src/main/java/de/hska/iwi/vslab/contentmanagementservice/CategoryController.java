@@ -33,7 +33,7 @@ public class CategoryController {
 	@GetMapping
 	public ResponseEntity<Category[]> getCategory() {
 		ResponseEntity<Category[]> cs = categoryClient.getCategories();
-		
+
 		// Login user
 		// TODO return category
 		if (cs != null)
@@ -76,5 +76,4 @@ public class CategoryController {
 		return productClient.getProductsByCategoryId(id);
 	}
 
-	
 }

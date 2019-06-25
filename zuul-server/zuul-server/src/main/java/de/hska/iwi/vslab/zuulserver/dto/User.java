@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.zuulserver;
+package de.hska.iwi.vslab.zuulserver.dto;
 
 public class User {
 	private String username;

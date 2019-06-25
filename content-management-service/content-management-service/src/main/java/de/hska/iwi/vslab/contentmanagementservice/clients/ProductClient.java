@@ -19,16 +19,19 @@ public class ProductClient {
 	private String productUri = "http://product-service:8764/products/";
 	private final Map<Integer, Product> productCache = new LinkedHashMap<Integer, Product>();
 
+	private final RestTemplate rt;
+
+	public ProductClient() {
+		rt = new RestTemplate();
+	}
+
 	public ResponseEntity<Product> createProduct(JSONProduct p) {
-		RestTemplate rt = new RestTemplate();
-		
 		return rt.postForEntity(productUri, p, Product.class);
 	}
 
 	@HystrixCommand(fallbackMethod = "getAllProductsCache", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public ResponseEntity<Product[]> getProducts() {
-		RestTemplate rt = new RestTemplate();
 		ResponseEntity<Product[]> entity = rt.getForEntity(productUri, Product[].class);
 
 		return entity;
@@ -41,9 +44,8 @@ public class ProductClient {
 	@HystrixCommand(fallbackMethod = "getProductCache", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public ResponseEntity<Product> getProductById(int id) {
-		RestTemplate rt = new RestTemplate();
 		ResponseEntity<Product> entity = rt.getForEntity(productUri + "/" + id, Product.class);
-		
+
 		if (entity != null && entity.getBody() != null)
 			productCache.putIfAbsent(id, entity.getBody());
 
@@ -51,22 +53,23 @@ public class ProductClient {
 	}
 
 	public boolean deleteProduct(int id) {
-		RestTemplate rt = new RestTemplate();
 		rt.delete(productUri + "/" + id);
 
 		return true;
 	}
 
-	public ResponseEntity<Product[]> searchProduct(String searchText) {
-		return null;
-	}
-	
 	public Response getProductCache(int catId) {
 		return Response.ok(productCache.get(catId)).build();
 	}
 
 	public Response getAllProductsCache() {
 		return Response.ok(productCache.values()).build();
+	}
+
+	public ResponseEntity<Product[]> getProductsForSearchValue(String searchDescription, double searchMinPrice,
+			double searchMaxPrice) {
+		return rt.getForEntity(productUri + "search?searchDescription=" + searchDescription + "&searchMinPrice="
+				+ searchMinPrice + "&searchMaxPrice=" + searchMaxPrice, Product[].class);
 	}
 
 }

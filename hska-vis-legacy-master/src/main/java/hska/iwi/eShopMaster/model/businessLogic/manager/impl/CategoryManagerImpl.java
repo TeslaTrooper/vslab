@@ -35,7 +35,7 @@ public class CategoryManagerImpl implements CategoryManager{
 	public void delCategory(Category cat) {
 	
 // 		Products are also deleted because of relation in Category.java 
-		helper.deleteById(cat.getId());
+		helper.deleteById(cat.getCategoryId());
 	}
 
 	public void delCategoryById(int id) {

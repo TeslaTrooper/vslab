@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.zuulserver;
+package de.hska.iwi.vslab.zuulserver.controller;
 
 import javax.ws.rs.core.Response;
 
@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import de.hska.iwi.vslab.zuulserver.ContentClient;
+import de.hska.iwi.vslab.zuulserver.dto.Registration;
+import de.hska.iwi.vslab.zuulserver.dto.User;
 
 @RestController
 @RequestMapping(value = "/users/")

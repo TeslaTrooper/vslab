@@ -46,10 +46,11 @@ public class ProductController {
 
 		return Response.serverError().build();
 	}
-
-	@RequestMapping(value = "/search", params = "text", method = RequestMethod.GET)
-	public ResponseEntity<Product[]> searchProducts(@RequestParam("text") String search) {
-		return productClient.searchProduct(search);
+	
+	@RequestMapping(value = "search", method = RequestMethod.GET)
+	public ResponseEntity<Product[]> getProductsForSearchValue(@RequestParam String searchDescription,
+			@RequestParam double searchMinPrice, @RequestParam double searchMaxPrice) {
+		return productClient.getProductsForSearchValue(searchDescription, searchMinPrice, searchMaxPrice);
 	}
 
 }

@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.zuulserver;
+package de.hska.iwi.vslab.zuulserver.controller;
 
 import javax.ws.rs.core.Response;
 
@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import de.hska.iwi.vslab.zuulserver.ContentClient;
+import de.hska.iwi.vslab.zuulserver.dto.Category;
+import de.hska.iwi.vslab.zuulserver.dto.ClientCategory;
 
 @RestController
 @RequestMapping(value = "/categories/")
@@ -27,12 +31,12 @@ public class CategoryContoller {
 	}
 
 	@GetMapping
-	public Category[] getCategories() {
+	public ClientCategory[] getCategories() {
 		return client.getCategories();
 	}
 
 	@GetMapping("{id}")
-	public Category getCategory(@PathVariable final int id) {
+	public ClientCategory getCategory(@PathVariable final int id) {
 		return client.getCategoryById(id);
 	}
 

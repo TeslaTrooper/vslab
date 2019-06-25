@@ -3,9 +3,15 @@ package hska.iwi.eShopMaster.controller;
 import hska.iwi.eShopMaster.model.businessLogic.manager.UserManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.UserManagerImpl;
 import hska.iwi.eShopMaster.model.database.dataobjects.Role;
+import hska.iwi.eShopMaster.model.database.dataobjects.User;
+import hska.iwi.eShopMaster.model.database.dataobjects.UserRegistration;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
 
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -23,32 +29,50 @@ public class RegisterAction extends ActionSupport {
     
     private Role role = null;
     
+    private static final String USER_URL = "http://localhost:8770/users/";
+    
     @Override
     public String execute() throws Exception {
         
         // Return string:
         String result = "input";
-
-        UserManager userManager = new UserManagerImpl();
-
-   		this.role = userManager.getRoleByLevel(1); // 1 -> regular User, 2-> Admin
-
-   		if (!userManager.doesUserAlreadyExist(this.username)) {
-    		    	
-	        // save it to database
-	        userManager.registerUser(this.username, this.firstname, this.lastname, this.password1, this.role);
-	            // User has been saved successfully to databse:
-	        	addActionMessage("user registered, please login");
-	        	addActionError("user registered, please login");
-				Map<String, Object> session = ActionContext.getContext().getSession();
-				session.put("message", "user registered, please login");
-	            result = "success";
-	        
-    	}
-    	else {
-    		addActionError(getText("error.username.alreadyInUse"));
-    	}
+        
+        Gson gson = new Gson();
+        UserRegistration u = new UserRegistration(username, firstname, lastname,
+    			password1, password2);
+        
+        
+        Unirest.post(USER_URL)
+			      .header("accept", "application/json")
+			      .body(gson.toJson(u))
+			      .asJson();
+        
+//        session.put("message", "user registered, please login");
+        result = "success";
+        
         return result;
+        
+
+//        UserManager userManager = new UserManagerImpl();
+//
+//   		this.role = userManager.getRoleByLevel(1); // 1 -> regular User, 2-> Admin
+//
+//   		if (!userManager.doesUserAlreadyExist(this.username)) {
+//    		    	
+//	        // save it to database
+//	        userManager.registerUser(this.username, this.firstname, this.lastname, this.password1, this.role);
+//	            // User has been saved successfully to databse:
+//	        	addActionMessage("user registered, please login");
+//	        	addActionError("user registered, please login");
+//				Map<String, Object> session = ActionContext.getContext().getSession();
+//				session.put("message", "user registered, please login");
+//	            result = "success";
+//	        
+//    	}
+//    	else {
+//    		addActionError(getText("error.username.alreadyInUse"));
+//    	}
+//        return result;
 
     }
     

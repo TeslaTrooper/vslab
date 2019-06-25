@@ -1,5 +1,9 @@
 package de.hska.iwi.vslab.productservice.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.hska.iwi.vslab.productservice.dao.ProductRepo;
@@ -42,7 +48,7 @@ public class ProductController {
 		} else {
 			throw new IllegalArgumentException("Product must have price!");
 		}
-		
+
 		Product p = new Product(product.getName(), product.getPrice(), product.getCategoryId(), product.getDetails());
 		return new ResponseEntity<>(repo.save(p), HttpStatus.CREATED);
 	}
@@ -64,6 +70,22 @@ public class ProductController {
 	public ResponseEntity<?> deleteProduct(@PathVariable final int id) {
 		repo.deleteById(id);
 		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "search", method = RequestMethod.GET)
+	public ResponseEntity<List<Product>> getProductsForSearchValue(@RequestParam String searchDescription,
+			@RequestParam double searchMinPrice, @RequestParam double searchMaxPrice) {
+		try {
+			searchDescription = URLDecoder.decode(searchDescription, "UTF-8");
+			if (searchMaxPrice < 0) {
+				searchMaxPrice = Double.MAX_VALUE;
+			}
+			List<Product> products = this.repo.findProductsByDetailsContainingIgnoreCaseAndPriceBetween(
+					searchDescription, searchMinPrice, searchMaxPrice);
+			return new ResponseEntity<>(products, HttpStatus.OK);
+		} catch (UnsupportedEncodingException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

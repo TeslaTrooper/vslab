@@ -47,7 +47,7 @@ public class ProductManagerImpl implements ProductManager {
 			}
 			
 			helper.saveObject(product);
-			productId = product.getId();
+			productId = product.getProductId();
 		}
 			 
 		return productId;
