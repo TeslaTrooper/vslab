@@ -8,23 +8,23 @@ public class Product {
 
 	private double price;
 
-	private int categoryId;
+	private Category category;
 
 	private String details;
 
 	public Product() {
 	}
 
-	public Product(String name, double price, int categoryId) {
+	public Product(String name, double price, Category category) {
 		this.name = name;
 		this.price = price;
-		this.categoryId = categoryId;
+		this.category = category;
 	}
 
-	public Product(String name, double price, int categoryId, String details) {
+	public Product(String name, double price, Category categoryId, String details) {
 		this.name = name;
 		this.price = price;
-		this.categoryId = categoryId;
+		this.category = category;
 		this.details = details;
 	}
 
@@ -52,12 +52,12 @@ public class Product {
 		this.price = price;
 	}
 
-	public int getCategoryID() {
-		return this.categoryId;
+	public Category getCategory() {
+		return this.category;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setCategoryId(Category category) {
+		this.category = category;
 	}
 
 	public String getDetails() {

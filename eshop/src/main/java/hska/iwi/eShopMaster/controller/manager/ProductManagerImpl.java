@@ -14,6 +14,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.Product;
 public class ProductManagerImpl {
 	
 	private static final String PRODUCT_URL = "http://localhost:8770/products";
+	private static final String CAT_URL = "http://localhost:8770/categories";
 	private final OAuth2RestTemplate oAuth2RestTemplate;
 	
 	public ProductManagerImpl() {
@@ -21,28 +22,58 @@ public class ProductManagerImpl {
 	}
 
 	public List<Product> getProducts() {
-		return null;
-//		return helper.getObjectList();
+		try {
+			ApiProduct[] aps = oAuth2RestTemplate.getForEntity(PRODUCT_URL, ApiProduct[].class).getBody();
+			List<Product> ps = new ArrayList<Product>();
+			for(ApiProduct p: aps) {
+				CategoryManagerImpl catManager = new CategoryManagerImpl();
+				Category g = catManager.getCategory(p.getCategoryId());
+				ps.add(new Product(p.getName(), p.getPrice(), g, p.getDetails()));
+			}
+			return ps;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public List<Product> getProductsForSearchValues(String searchDescription,
 			Double searchMinPrice, Double searchMaxPrice) {
-				return null;	
-//		return new ProductDAO().getProductListByCriteria(searchDescription, searchMinPrice, searchMaxPrice);
+		try {
+			ApiProduct[] aps = oAuth2RestTemplate.getForEntity(PRODUCT_URL, ApiProduct[].class,
+					searchDescription, searchMinPrice, searchMaxPrice).getBody();
+			List<Product> ps = new ArrayList<Product>();
+			for(ApiProduct p: aps) {
+				CategoryManagerImpl catManager = new CategoryManagerImpl();
+				Category g = catManager.getCategory(p.getCategoryId());
+				ps.add(new Product(p.getName(), p.getPrice(), g, p.getDetails()));
+			}
+			return ps;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Product getProductById(int id) {
-		return oAuth2RestTemplate.getForEntity(PRODUCT_URL + "/" + id, Product.class).getBody();
+		ApiProduct ap = oAuth2RestTemplate.getForEntity(PRODUCT_URL + "/" + id, ApiProduct.class).getBody();
+		CategoryManagerImpl catManager = new CategoryManagerImpl();
+		Category g = catManager.getCategory(ap.getCategoryId());
+		Product product = new Product(ap.getName(), ap.getPrice(), g, ap.getDetails());
+		return product;
 	}
 
 	public Product getProductByName(String name) {
 		
-		List<Product> ps =
-				new ArrayList<Product>(Arrays.asList(
-						oAuth2RestTemplate.getForEntity(PRODUCT_URL, Product[].class).getBody()));
-		for(Product p: ps) {
+		List<ApiProduct> ps =
+				new ArrayList<ApiProduct>(Arrays.asList(
+						oAuth2RestTemplate.getForEntity(PRODUCT_URL, ApiProduct[].class).getBody()));
+		for(ApiProduct p: ps) {
 			if(p.getName() == name) {
-				return p;
+				CategoryManagerImpl catManager = new CategoryManagerImpl();
+				Category g = catManager.getCategory(p.getCategoryId());
+				Product product = new Product(p.getName(), p.getPrice(), g, p.getDetails());
+				return product;
 			}
 		}
 		return null;
@@ -61,8 +92,8 @@ public class ProductManagerImpl {
 			}
 			
 			try {
-				Product p = oAuth2RestTemplate.postForEntity(PRODUCT_URL, name, Product.class).getBody();
-				productId = p.getProductId();
+				ApiProduct p = oAuth2RestTemplate.postForEntity(PRODUCT_URL, name, ApiProduct.class).getBody();
+				productId = p.getId();
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -85,7 +116,8 @@ public class ProductManagerImpl {
 	public boolean deleteProductsByCategoryId(int categoryId) {
 		List<Product> ps =
 				new ArrayList<Product>(Arrays.asList(
-						oAuth2RestTemplate.getForEntity(PRODUCT_URL + "/" + categoryId, Product[].class).getBody()));
+						oAuth2RestTemplate.getForEntity(
+								CAT_URL + "/" + categoryId + "/products", Product[].class).getBody()));
 		for(Product p: ps) {
 			this.deleteProductById(p.getProductId());
 		}
