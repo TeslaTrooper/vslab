@@ -32,7 +32,7 @@ public class UserManagerImpl {
 		}
 		try {
 			OAuth2RestTemplate oAuth2RestTemplate = Oauth.createOAuth2RestTemplate(username, password);
-			User user = oAuth2RestTemplate.getForObject(USER_URL, User.class, u);
+			User user = oAuth2RestTemplate.getForEntity(USER_URL, User.class, u).getBody();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
