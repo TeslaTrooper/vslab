@@ -1,14 +1,13 @@
 package hska.iwi.eShopMaster.controller;
 
-import hska.iwi.eShopMaster.model.businessLogic.manager.ProductManager;
-import hska.iwi.eShopMaster.model.businessLogic.manager.impl.ProductManagerImpl;
-import hska.iwi.eShopMaster.model.database.dataobjects.Product;
-import hska.iwi.eShopMaster.model.database.dataobjects.User;
-
 import java.util.Map;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+
+import hska.iwi.eShopMaster.controller.manager.ProductManagerImpl;
+import hska.iwi.eShopMaster.model.database.dataobjects.Product;
+import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
 public class ProductDetailsAction extends ActionSupport {
 	
@@ -32,7 +31,7 @@ public class ProductDetailsAction extends ActionSupport {
 		user = (User) session.get("webshop_user");
 		
 		if(user != null) {
-			ProductManager productManager = new ProductManagerImpl();
+			ProductManagerImpl productManager = new ProductManagerImpl();
 			product = productManager.getProductById(id);
 			
 			res = "success";			

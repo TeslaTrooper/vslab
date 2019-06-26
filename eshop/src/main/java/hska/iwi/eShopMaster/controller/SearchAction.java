@@ -1,19 +1,17 @@
 package hska.iwi.eShopMaster.controller;
 
-import hska.iwi.eShopMaster.model.businessLogic.manager.CategoryManager;
-import hska.iwi.eShopMaster.model.businessLogic.manager.ProductManager;
-import hska.iwi.eShopMaster.model.businessLogic.manager.impl.CategoryManagerImpl;
-import hska.iwi.eShopMaster.model.businessLogic.manager.impl.ProductManagerImpl;
-import hska.iwi.eShopMaster.model.database.dataobjects.Category;
-import hska.iwi.eShopMaster.model.database.dataobjects.Product;
-import hska.iwi.eShopMaster.model.database.dataobjects.User;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+
+import hska.iwi.eShopMaster.controller.manager.CategoryManagerImpl;
+import hska.iwi.eShopMaster.controller.manager.ProductManagerImpl;
+import hska.iwi.eShopMaster.model.database.dataobjects.Category;
+import hska.iwi.eShopMaster.model.database.dataobjects.Product;
+import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
 public class SearchAction extends ActionSupport{
 
@@ -46,7 +44,7 @@ public class SearchAction extends ActionSupport{
 		
 		if(user != null){
 			// Search products and show results:
-			ProductManager productManager = new ProductManagerImpl();
+			ProductManagerImpl productManager = new ProductManagerImpl();
 //			this.products = productManager.getProductsForSearchValues(this.searchDescription, this.searchMinPrice, this.searchMaxPrice);
 			if (!searchMinPrice.isEmpty()){
 				sMinPrice =  Double.parseDouble(this.searchMinPrice);
@@ -57,7 +55,7 @@ public class SearchAction extends ActionSupport{
 			this.products = productManager.getProductsForSearchValues(this.searchDescription, sMinPrice, sMaxPrice);
 			
 			// Show all categories:
-			CategoryManager categoryManager = new CategoryManagerImpl();
+			CategoryManagerImpl categoryManager = new CategoryManagerImpl();
 			this.categories = categoryManager.getCategories();
 			result = "success";
 		}

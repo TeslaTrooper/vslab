@@ -10,10 +10,9 @@ public class ApiProduct {
 	public ApiProduct() {}
 	
 	
-	public ApiProduct(String name, String details, int categoryId, double price) {
+	public ApiProduct(String name, int categoryId, double price) {
 		super();
 		this.name = name;
-		this.details = details;
 		this.categoryId = categoryId;
 		this.price = price;
 	}
