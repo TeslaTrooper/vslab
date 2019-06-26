@@ -43,4 +43,8 @@ public class LoginAction {
 
 		return true;
 	}
+	
+	public User getUserByUsername(String username) {
+		return userRepo.findByUsername(username);
+	}
 }

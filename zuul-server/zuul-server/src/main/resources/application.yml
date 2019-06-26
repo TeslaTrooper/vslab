@@ -18,10 +18,7 @@ zuul:
       service-id: users
       strip-prefix: false
     content-management: /cms/**
-    products:
-      path: /auth/**
-      serviceId: products
-      stripPrefix: false
+    products: /auth/**
 ribbon:
   ReadTimeout: 60000
   ConnectTimeout: 20000

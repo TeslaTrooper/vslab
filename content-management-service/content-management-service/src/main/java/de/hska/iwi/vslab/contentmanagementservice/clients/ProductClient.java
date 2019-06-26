@@ -1,11 +1,14 @@
 package de.hska.iwi.vslab.contentmanagementservice.clients;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -14,6 +17,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import de.hska.iwi.vslab.contentmanagementservice.Product;
 import de.hska.iwi.vslab.contentmanagementservice.dto.JSONProduct;
 
+@Component
 public class ProductClient {
 
 	private String productUri = "http://product-service:8764/products/";
@@ -35,10 +39,6 @@ public class ProductClient {
 		ResponseEntity<Product[]> entity = rt.getForEntity(productUri, Product[].class);
 
 		return entity;
-	}
-
-	public ResponseEntity<Product[]> getProductsByCategoryId(int catId) {
-		return null;
 	}
 
 	@HystrixCommand(fallbackMethod = "getProductCache", commandProperties = {
@@ -64,6 +64,18 @@ public class ProductClient {
 
 	public Response getAllProductsCache() {
 		return Response.ok(productCache.values()).build();
+	}
+	
+	public Product[] getProductsByCategoryId(int catId) {
+		Product[] products = getProducts().getBody();
+		List<Product> results = new ArrayList<>();
+		for(Product p : products) {
+			if(p.getCategoryId() == catId) {
+				results.add(p);
+			}
+		}
+		Product[] array = results.toArray(new Product[results.size()]);
+		return array;
 	}
 
 	public ResponseEntity<Product[]> getProductsForSearchValue(String searchDescription, double searchMinPrice,

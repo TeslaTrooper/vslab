@@ -3,6 +3,8 @@ package de.hska.iwi.vslab.userservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import de.hska.iwi.vslab.userservice.actions.LogoutAction;
 import de.hska.iwi.vslab.userservice.actions.RegisterAction;
 import de.hska.iwi.vslab.userservice.controller.json.JSONRegistration;
 import de.hska.iwi.vslab.userservice.controller.json.JSONUser;
+import de.hska.iwi.vslab.userservice.db.UserRepo;
 import de.hska.iwi.vslab.userservice.db.dataobjects.User;
 
 @RestController
@@ -23,12 +26,14 @@ public class UserController {
 	private final LoginAction loginAction;
 	private final LogoutAction logoutAction;
 
+
 	@Autowired
 	public UserController(final RegisterAction registerAction, final LoginAction loginAction,
 			final LogoutAction logoutAction) {
 		this.registerAction = registerAction;
 		this.loginAction = loginAction;
 		this.logoutAction = logoutAction;
+		
 	}
 
 	@PostMapping
@@ -58,6 +63,17 @@ public class UserController {
 	public ResponseEntity<User> logout(@RequestBody final JSONUser jSONUser) {
 		try {
 			logoutAction.logout();
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	@GetMapping("{username}")
+	public ResponseEntity<User> logout(@PathVariable String username) {
+		try {
+			loginAction.getUserByUsername(username);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}

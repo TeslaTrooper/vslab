@@ -1,10 +1,14 @@
 package de.hska.iwi.vslab.contentmanagementservice.clients;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,34 +16,46 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import de.hska.iwi.vslab.contentmanagementservice.Category;
+import de.hska.iwi.vslab.contentmanagementservice.Product;
+import de.hska.iwi.vslab.contentmanagementservice.dto.ClientCategory;
 
 public class CategoryClient {
 
 	private String categoryUri = "http://category-service:8766/categories/";
-	private final Map<Integer, Category> catCache = new LinkedHashMap<Integer, Category>();
+	private final Map<Integer, ClientCategory> catCache = new LinkedHashMap<>();
+
+	@Autowired
+	private ProductClient productClient;
 
 	public ResponseEntity<Category> createCategory(String name) {
 		RestTemplate rt = new RestTemplate();
-		
+
 		return rt.postForEntity(categoryUri, name, Category.class);
 	}
 
 	@HystrixCommand(fallbackMethod = "getAllCategoriesCache", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
-	public ResponseEntity<Category[]> getCategories() {
+	public ClientCategory[] getCategories() {
 		RestTemplate rt = new RestTemplate();
 		ResponseEntity<Category[]> entity = rt.getForEntity(categoryUri, Category[].class);
 
-		return entity;
+		List<ClientCategory> cats = new ArrayList<>();
+
+		for (Category c : entity.getBody()) {
+			Product[] ps = productClient.getProductsByCategoryId(c.getId());
+			cats.add(new ClientCategory(c.getId(), c.getName(), ps));
+		}
+
+		return cats.toArray(new ClientCategory[cats.size()]);
 	}
 
 	@HystrixCommand(fallbackMethod = "getCategoryCache", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
-	public ResponseEntity<Category> getCategoryById(int id) {
+	public ClientCategory getCategoryById(int id) {
 		RestTemplate rt = new RestTemplate();
-		ResponseEntity<Category> entity = rt.getForEntity(categoryUri + "/" + id, Category.class);
+		Category c = rt.getForEntity(categoryUri + "/" + id, Category.class).getBody();
 
-		return entity;
+		return new ClientCategory(c.getId(), c.getName(), productClient.getProductsByCategoryId(c.getId()));
 	}
 
 	public boolean deleteCategory(int id) {
@@ -48,13 +64,13 @@ public class CategoryClient {
 
 		return true;
 	}
-	
-	public Response getCategoriesCache(int catId) {
-		return Response.ok(catCache.get(catId)).build();
+
+	public ClientCategory getCategoriesCache(int catId) {
+		return catCache.get(catId);
 	}
 
-	public Response getAllCategoriesCache() {
-		return Response.ok(catCache.values()).build();
+	public Collection<ClientCategory> getAllCategoriesCache() {
+		return catCache.values();
 	}
 
 }

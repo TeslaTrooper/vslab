@@ -3,6 +3,7 @@ package de.hska.iwi.vslab.contentmanagementservice;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,14 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.hska.iwi.vslab.contentmanagementservice.clients.CategoryClient;
 import de.hska.iwi.vslab.contentmanagementservice.clients.ProductClient;
+import de.hska.iwi.vslab.contentmanagementservice.dto.ClientCategory;
 
 @RestController
 @RequestMapping(value = "/categories/")
 public class CategoryController {
 
-	private final Map<Integer, Category> catCache = new LinkedHashMap<Integer, Category>();
-	private CategoryClient categoryClient = new CategoryClient();
-	private ProductClient productClient = new ProductClient();
+	private final Map<Integer, ClientCategory> catCache;
+
+	private CategoryClient categoryClient;
+	private ProductClient productClient;
+
+	@Autowired
+	public CategoryController(final CategoryClient categoryClient) {
+		this.categoryClient = categoryClient;
+		catCache = new LinkedHashMap<>();
+	}
 
 	@PostMapping(consumes = "text/plain")
 	public ResponseEntity<Category> createCategory(@RequestBody String name) {
@@ -31,31 +40,28 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Category[]> getCategory() {
-		ResponseEntity<Category[]> cs = categoryClient.getCategories();
+	public ClientCategory[] getCategory() {
+		ClientCategory[] cs = categoryClient.getCategories();
 
 		// Login user
 		// TODO return category
 		if (cs != null)
-			for (Category c : cs.getBody())
+			for (ClientCategory c : cs)
 				catCache.putIfAbsent(c.getId(), c);
 
 		return cs;
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
-		// Logout user
-
-		Category c = categoryClient.getCategoryById(id).getBody();
+	public ClientCategory getCategoryById(@PathVariable int id) {
+		ClientCategory c = categoryClient.getCategoryById(id);
 
 		if (c != null) {
 			catCache.putIfAbsent(id, c);
-			return new ResponseEntity<>(c, HttpStatus.OK);
+			return c;
 		}
 
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-
+		return null;
 	}
 
 	@DeleteMapping("{id}")
@@ -71,8 +77,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("{id}/products")
-	public ResponseEntity<Product[]> getProducts(@PathVariable int id) {
-		// Logout user
+	public Product[] getProducts(@PathVariable int id) {
 		return productClient.getProductsByCategoryId(id);
 	}
 
