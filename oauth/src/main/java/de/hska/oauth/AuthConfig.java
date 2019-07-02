@@ -1,6 +1,7 @@
-package de.hska.iwi.vslab.productservice;
+package de.hska.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 public class AuthConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired
+	@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
 
 	@Override

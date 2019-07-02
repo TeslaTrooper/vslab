@@ -108,6 +108,18 @@ services:
       local_net:
         aliases:
           - content-management-service
+  oauth-service:
+    depends_on:
+      - eureka
+    build:
+      context: ./oauth/
+      dockerfile: ./Dockerfile
+    expose: 
+      - "8099"
+    networks:
+      local_net:
+        aliases:
+          - oauth
 
 networks: 
   local_net:

@@ -10,11 +10,11 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 
-@EnableDiscoveryClient
-@EnableCircuitBreaker
+//@EnableDiscoveryClient
+//@EnableCircuitBreaker
 //@EnableHystrixDashboard
-@RibbonClient("zuul-server")
-@EnableEurekaClient
+//@RibbonClient("zuul-server")
+//@EnableEurekaClient
 
 @SpringBootApplication
 @EnableZuulProxy

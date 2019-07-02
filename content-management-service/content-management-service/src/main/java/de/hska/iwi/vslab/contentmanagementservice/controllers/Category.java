@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.contentmanagementservice;
+package de.hska.iwi.vslab.contentmanagementservice.controllers;
 
 public class Category {
 	

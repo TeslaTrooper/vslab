@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.contentmanagementservice.clients;
+package de.hska.iwi.vslab.contentmanagementservice.controllers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,19 +6,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-import de.hska.iwi.vslab.contentmanagementservice.Category;
-import de.hska.iwi.vslab.contentmanagementservice.Product;
 import de.hska.iwi.vslab.contentmanagementservice.dto.ClientCategory;
 
+@Component
 public class CategoryClient {
 
 	private String categoryUri = "http://category-service:8766/categories/";
@@ -27,6 +26,11 @@ public class CategoryClient {
 	@Autowired
 	private ProductClient productClient;
 
+	@Autowired
+	public CategoryClient() {
+		
+	}
+	
 	public ResponseEntity<Category> createCategory(String name) {
 		RestTemplate rt = new RestTemplate();
 

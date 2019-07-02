@@ -12,13 +12,17 @@ zuul:
     connect-timeout-millis: 20000
     socket-timeout-millis: 60000
   ignored-services: '*'
+  ribbon:
+    eager-load:
+      enabled: true
   routes:
     users:
       path: /users/**
       service-id: users
       strip-prefix: false
     content-management: /cms/**
-    products: /auth/**
-ribbon:
-  ReadTimeout: 60000
-  ConnectTimeout: 20000
+    oauth:
+      path: /auth/**
+      service-id: oauth
+      strip-prefix: false
+  

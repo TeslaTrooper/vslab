@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.contentmanagementservice;
+package de.hska.iwi.vslab.contentmanagementservice.controllers;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.hska.iwi.vslab.contentmanagementservice.clients.CategoryClient;
-import de.hska.iwi.vslab.contentmanagementservice.clients.ProductClient;
 import de.hska.iwi.vslab.contentmanagementservice.dto.ClientCategory;
 
 @RestController
@@ -24,12 +22,15 @@ public class CategoryController {
 
 	private final Map<Integer, ClientCategory> catCache;
 
+	@Autowired
 	private CategoryClient categoryClient;
+	
+	@Autowired
 	private ProductClient productClient;
 
 	@Autowired
-	public CategoryController(final CategoryClient categoryClient) {
-		this.categoryClient = categoryClient;
+	public CategoryController() {
+		//this.categoryClient = categoryClient;
 		catCache = new LinkedHashMap<>();
 	}
 

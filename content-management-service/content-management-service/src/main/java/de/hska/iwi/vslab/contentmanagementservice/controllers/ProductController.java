@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.contentmanagementservice;
+package de.hska.iwi.vslab.contentmanagementservice.controllers;
 
 import javax.ws.rs.core.Response;
 
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.hska.iwi.vslab.contentmanagementservice.clients.ProductClient;
 import de.hska.iwi.vslab.contentmanagementservice.dto.JSONProduct;
 
 @RestController

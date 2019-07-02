@@ -1,6 +1,6 @@
 package de.hska.iwi.vslab.contentmanagementservice.dto;
 
-import de.hska.iwi.vslab.contentmanagementservice.Product;
+import de.hska.iwi.vslab.contentmanagementservice.controllers.Product;
 
 public class ClientCategory {
 

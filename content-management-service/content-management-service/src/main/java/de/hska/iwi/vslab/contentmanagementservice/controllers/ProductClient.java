@@ -1,4 +1,4 @@
-package de.hska.iwi.vslab.contentmanagementservice.clients;
+package de.hska.iwi.vslab.contentmanagementservice.controllers;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-import de.hska.iwi.vslab.contentmanagementservice.Product;
 import de.hska.iwi.vslab.contentmanagementservice.dto.JSONProduct;
 
 @Component
