@@ -3,6 +3,7 @@ package de.hska.iwi.vslab.userservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,9 +72,20 @@ public class UserController {
 	}
 	
 	@GetMapping("{username}")
-	public ResponseEntity<User> logout(@PathVariable String username) {
+	public ResponseEntity<User> getUser(@PathVariable String username) {
 		try {
 			loginAction.getUserByUsername(username);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("{userid}")
+	public ResponseEntity<User> deleteUser(@PathVariable int userid) {
+		try {
+			loginAction.deleteUserById(userid);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}

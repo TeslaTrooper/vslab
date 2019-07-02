@@ -47,4 +47,8 @@ public class LoginAction {
 	public User getUserByUsername(String username) {
 		return userRepo.findByUsername(username);
 	}
+	
+	public void deleteUserById(int userid) {
+		userRepo.deleteById((long) userid);
+	}
 }

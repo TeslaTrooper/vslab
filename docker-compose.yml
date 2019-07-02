@@ -113,14 +113,14 @@ services:
     depends_on:
       - eureka
     build:
-      context: ./oauth/
+      context: ./oauth
       dockerfile: ./Dockerfile
-    expose: 
-      - "8099"
+    ports:
+      - "8099:8099"
     networks:
       local_net:
         aliases:
-          - oauth
+          - oauth-service
 
 networks: 
   local_net:

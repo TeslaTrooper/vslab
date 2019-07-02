@@ -6,6 +6,8 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     statusPageUrlPath: /info
     healthCheckUrlPath: /health
+  client:
+    fetchRegistry: true
 
 zuul:
   host:
@@ -22,5 +24,3 @@ zuul:
       strip-prefix: false
     content-management: /cms/**
     oauth: /auth/**
-
-  

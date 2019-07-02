@@ -14,6 +14,9 @@ public class RegisterAction {
 
 	private final UserRepo userRepo;
 	private final RoleRepo roleRepo;
+	
+	private static final Role ADMIN = new Role("ADMIN", 0);
+	private static final Role USER = new Role("USER", 1);
 
 	@Autowired
 	public RegisterAction(final UserRepo userRepo, final RoleRepo roleRepo) {
@@ -21,8 +24,11 @@ public class RegisterAction {
 		this.roleRepo = roleRepo;
 		
 		roleRepo.deleteAll();
-		roleRepo.save(new Role("admin", 0));
-		roleRepo.save(new Role("user", 1));
+		roleRepo.save(ADMIN);
+		roleRepo.save(USER);
+		
+//		userRepo.deleteAll();
+//		userRepo.save(new User("admin", "admin", "admin", "admin", ADMIN));
 	}
 
 	public User register(final JSONRegistration jSONRegistration) throws Exception {
