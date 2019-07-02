@@ -8,6 +8,10 @@ eureka:
     healthCheckUrlPath: /health
 
 zuul:
+  sensitiveHeaders: 
+  - Cookie,Set-Cookie
+  ignoredHeaders:
+  - authorization
   host:
     connect-timeout-millis: 20000
     socket-timeout-millis: 60000
@@ -21,6 +25,9 @@ zuul:
       service-id: users
       strip-prefix: false
     content-management: /cms/**
-    oauth: /auth/**
-
+    oauth:   
+      path: /auth/**
+      serviceId: oauth
+      stripPrefix: false
+      sensitiveHeaders: true
   
