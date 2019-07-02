@@ -15,7 +15,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.UserRegistration;
 
 public class UserManagerImpl {
 
-	private static final String USER_URL = "http://localhost:8770/users";
+	private static final String USER_URL = "http://zuul:8770/users";
 
 	public void registerUser(String username, String name, String lastname, String password, String password2) {
 		UserRegistration user = new UserRegistration(username, name, lastname, password, password2);
@@ -31,7 +31,7 @@ public class UserManagerImpl {
 		}
 		try {
 			OAuth2RestTemplate oAuth2RestTemplate = Oauth.createOAuth2RestTemplate(username, password);
-			User user = oAuth2RestTemplate.getForEntity(USER_URL, User.class, u).getBody();
+			User user = oAuth2RestTemplate.getForEntity(USER_URL + "/" + u.getUsername(), User.class).getBody();
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,7 +44,7 @@ public class UserManagerImpl {
 			return null;
 		}
 
-		return Oauth.getDefaultRestTemplate().getForEntity(USER_URL, User.class, username).getBody();
+		return Oauth.getDefaultRestTemplate().getForEntity(USER_URL + "/" + username, User.class).getBody();
 	}
 
 	public boolean deleteUserById(int id) {

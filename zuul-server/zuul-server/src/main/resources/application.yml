@@ -24,3 +24,8 @@ zuul:
       strip-prefix: false
     content-management: /cms/**
     oauth: /auth/**
+    
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://oauth-service:8099/auth/user

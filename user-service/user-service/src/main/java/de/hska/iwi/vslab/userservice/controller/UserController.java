@@ -74,12 +74,11 @@ public class UserController {
 	@GetMapping("{username}")
 	public ResponseEntity<User> getUser(@PathVariable String username) {
 		try {
-			loginAction.getUserByUsername(username);
+			return new ResponseEntity<User>(loginAction.getUserByUsername(username), HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-
-		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("{userid}")

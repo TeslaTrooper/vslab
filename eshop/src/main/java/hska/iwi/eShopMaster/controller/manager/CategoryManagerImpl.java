@@ -13,7 +13,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 public class CategoryManagerImpl {
 
 
-	private static final String CAT_URL = "http://localhost:8770/categories";
+	private static final String CAT_URL = "http://zuul:8770/categories";
 	private final OAuth2RestTemplate oAuth2RestTemplate;
 	
 	public CategoryManagerImpl() {

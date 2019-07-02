@@ -13,8 +13,8 @@ import hska.iwi.eShopMaster.model.database.dataobjects.Product;
 
 public class ProductManagerImpl {
 	
-	private static final String PRODUCT_URL = "http://localhost:8770/products";
-	private static final String CAT_URL = "http://localhost:8770/categories";
+	private static final String PRODUCT_URL = "http://zuul:8770/products";
+	private static final String CAT_URL = "http://zuul:8770/categories";
 	private final OAuth2RestTemplate oAuth2RestTemplate;
 	
 	public ProductManagerImpl() {

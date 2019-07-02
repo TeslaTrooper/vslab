@@ -20,7 +20,7 @@
         <module>content-management-service/content-management-service</module>
         <module>category-service/category-service</module>
         <module>oauth</module>
-        <!-- <module>hska-vis-legacy-master</module>-->
+        <module>eshop</module>
     </modules>
 
 </project>

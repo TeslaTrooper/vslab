@@ -23,12 +23,13 @@ public class RegisterAction {
 		this.userRepo = userRepo;
 		this.roleRepo = roleRepo;
 		
+		userRepo.deleteAll();
 		roleRepo.deleteAll();
+		
 		roleRepo.save(ADMIN);
 		roleRepo.save(USER);
 		
-//		userRepo.deleteAll();
-//		userRepo.save(new User("admin", "admin", "admin", "admin", ADMIN));
+		userRepo.save(new User("admin", "admin", "admin", "admin", ADMIN));
 	}
 
 	public User register(final JSONRegistration jSONRegistration) throws Exception {

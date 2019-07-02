@@ -121,6 +121,18 @@ services:
       local_net:
         aliases:
           - oauth-service
+          
+  legacywebshop:
+    build:
+      context: ./eshop
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8888:8080"
+    networks:
+      local_net:
+          aliases:
+              - legacywebshop
+  
 
 networks: 
   local_net:

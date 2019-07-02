@@ -13,8 +13,11 @@ eureka:
         metadataMap:
             instanceId: "${spring.application.name}:${random.value}"
 management:
-  endpoints:
-    web:
-      exposure:
-        include: hystrix.stream
-    
+    endpoints:
+        web:
+            exposure:
+                include: hystrix.stream
+security:
+    oauth2:
+        resource:
+            user-info-uri: http://oauth-service:8099/auth/user

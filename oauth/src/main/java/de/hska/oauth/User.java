@@ -1,19 +1,23 @@
-package hska.iwi.eShopMaster.model.database.dataobjects;
+package de.hska.oauth;
 
-public class User {
+public class User  implements java.io.Serializable {
 
-	private int id;
+	private long id;
+
 	private String username;
+
 	private String firstname;
+
 	private String lastname;
-	private String password;	
+	
+	private String password;
+
 	private Role role;
 
 	public User() {
 	}
-
-	public User(String username, String firstname, String lastname,
-			String password, Role role) {
+	
+	public User(String username, String firstname, String lastname, String password, Role role) {
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -21,12 +25,8 @@ public class User {
 		this.role = role;
 	}
 
-	public int getUserId() {
+	public long getId() {
 		return this.id;
-	}
-
-	public void setUserId(int id) {
-		this.id = id;
 	}
 
 	public String getUsername() {
@@ -67,6 +67,6 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
+}
 
 }

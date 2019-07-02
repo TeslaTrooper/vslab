@@ -11,9 +11,9 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 import org.springframework.web.client.RestTemplate;
 
 public class Oauth {
-		private static final String ZUUL = "http://zuul:8770";
-		private static final String TOKEN_URI = ZUUL + "/auth/oauth/token";
-		private static final String CLIENT_ID = "client";
+	
+		private static final String TOKEN_URI = "http://zuul:8770/auth/auth/oauth/token";
+		private static final String CLIENT_ID = "clientId";
 		private static final String CLIENT_SECRET = "clientsecret";
 		private static final String SCOPE = "openid";
 		private static final String GRANT_TYPE = "password";
