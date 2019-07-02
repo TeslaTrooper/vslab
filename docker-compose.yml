@@ -108,6 +108,7 @@ services:
       local_net:
         aliases:
           - content-management-service
+
   oauth-service:
     depends_on:
       - eureka

@@ -6,4 +6,4 @@ WORKDIR /usr/app
 
 RUN sh -c 'touch oauth-0.0.1-SNAPSHOT.jar'
 
-ENTRYPOINT ["java","-jar","oauth-server-0.0.1-SNAPSHOT.jar"]  
+ENTRYPOINT ["java","-jar","oauth-0.0.1-SNAPSHOT.jar"]  

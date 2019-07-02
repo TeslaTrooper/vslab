@@ -21,8 +21,6 @@ zuul:
       service-id: users
       strip-prefix: false
     content-management: /cms/**
-    oauth:
-      path: /auth/**
-      service-id: oauth
-      strip-prefix: false
+    oauth: /auth/**
+
   
